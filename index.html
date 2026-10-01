@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ภูเก็ตกราฟ – คณิตศาสตร์ดิสครีตกับการท่องเที่ยวทะเลภูเก็ต</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700&family=Sarabun:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>ภูเก็ตกราฟ</h1>
+  <p>เที่ยวทะเลภูเก็ตด้วยคณิตศาสตร์ดิสครีต: มองแต่ละชายหาดเป็นจุดยอด และถนนเป็นเส้นเชื่อมที่มีระยะทาง (กม.)</p>
+  <nav id="nav">
+    <button data-p="1" class="on">1 แผนที่กราฟ</button>
+    <button data-p="2">2 สำรวจ BFS / DFS</button>
+    <button data-p="3">3 เส้นทางสั้นสุด</button>
+    <button data-p="4">4 ต้นไม้ (Tree) และ MST</button>
+  </nav>
+</header>
+<main>
+
+<section id="p1" class="pg on">
+  <h2>แผนที่กราฟท่องเที่ยวภูเก็ต</h2>
+  <div class="grid">
+    <div><svg id="s1" class="map" viewBox="0 0 500 540" role="img" aria-label="กราฟแหล่งท่องเที่ยวภูเก็ต"></svg>
+      <p class="legend">คลิกที่จุดเพื่อดูข้อมูลของสถานที่ (ระยะทางเป็นค่าประมาณเพื่อการเรียนรู้)</p></div>
+    <div>
+      <div class="panel"><h3>กราฟ G = (V, E)</h3>
+        <p><span class="big" id="cv"></span> จุดยอด &nbsp; <span class="big" id="ce"></span> เส้นเชื่อม</p>
+        <p>ผลรวมดีกรีทุกจุด = <b id="sd"></b> เท่ากับ 2|E| ตามทฤษฎีบทจับมือ (Handshaking Lemma) กราฟนี้<b id="cn"></b></p></div>
+      <div class="panel" style="margin-top:14px"><h3 id="ih">เลือกสถานที่บนแผนที่</h3><div id="info">คลิกจุดบนแผนที่เพื่อดูดีกรีและเพื่อนบ้านของจุดนั้น</div></div>
+      <div class="panel" style="margin-top:14px"><h3>หัวข้อคณิตศาสตร์ดิสครีตที่ใช้</h3>
+        <p><b>ทฤษฎีกราฟ</b> ใช้ในหน้า 1–3: กราฟถ่วงน้ำหนัก, BFS, DFS, Dijkstra<br><b>ต้นไม้ (Tree)</b> ใช้ในหน้า 2 และ 4: ต้นไม้ค้นหาจาก BFS/DFS และต้นไม้ค้ำจุนน้อยสุด (MST)</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="p2" class="pg">
+  <h2>สำรวจแหล่งท่องเที่ยวด้วย BFS และ DFS</h2>
+  <p>BFS ไปทีละชั้นด้วยคิว (Queue) ส่วน DFS ลึกสุดก่อนด้วยสแตก (Stack) เส้นสีน้ำเงินคือต้นไม้ที่ได้จากการค้นหา</p>
+  <div class="grid">
+    <div><svg id="s2" class="map" viewBox="0 0 500 540"></svg>
+      <p class="legend"><span class="dot" style="background:var(--bad)"></span>กำลังเยี่ยม<span class="dot" style="background:var(--acc)"></span>เยี่ยมแล้ว<span class="dot" style="background:#ffe9a8"></span>รอเยี่ยม</p></div>
+    <div class="panel">
+      <div class="ctl"><label>เริ่มที่ <select id="a2s"></select></label><label><select id="a2m"><option value="bfs">BFS (คิว)</option><option value="dfs">DFS (สแตก)</option></select></label></div>
+      <div class="ctl"><button class="b" id="n2">ก้าวถัดไป</button><button class="b alt" id="p2a">เล่นอัตโนมัติ</button><button class="b alt" id="r2">เริ่มใหม่</button></div>
+      <h3>ลำดับที่เยี่ยม</h3><div id="o2"></div>
+      <h3 style="margin-top:12px" id="fl">Queue</h3><div id="f2"></div>
+      <p class="legend" style="margin-top:12px">เวลาทำงาน O(V + E) ต้นไม้ที่ได้มีเส้นเชื่อมเท่ากับจำนวนจุดที่เยี่ยมลบ 1</p>
+    </div>
+  </div>
+</section>
+
+<section id="p3" class="pg">
+  <h2>หาเส้นทางสั้นที่สุดด้วย Dijkstra</h2>
+  <p>เลือกจุดเริ่มต้นและปลายทาง กราฟถ่วงน้ำหนักจะหาเส้นทางที่รวมระยะทางน้อยที่สุดให้</p>
+  <div class="grid">
+    <div><svg id="s3" class="map" viewBox="0 0 500 540"></svg></div>
+    <div class="panel">
+      <div class="ctl"><label>จาก <select id="d3a"></select></label><label>ไป <select id="d3b"></select></label></div>
+      <p><span class="big" id="k3"></span> กม. &nbsp;ประมาณ <b id="t3"></b> นาที (เฉลี่ย 40 กม./ชม.)</p>
+      <div id="r3"></div>
+      <h3 style="margin-top:12px">ระยะสั้นสุดจากจุดเริ่มต้นไปทุกที่</h3><table id="tb3"></table>
+    </div>
+  </div>
+</section>
+
+<section id="p4" class="pg">
+  <h2>ต้นไม้ค้ำจุนน้อยสุด: วางถนนให้ครบทุกที่ประหยัดสุด</h2>
+  <p>อัลกอริทึมของ Kruskal เรียงเส้นเชื่อมจากสั้นไปยาว เลือกเส้นที่ไม่ทำให้เกิดวงจร จนได้ต้นไม้ที่ต่อ 12 จุดด้วย 11 เส้น</p>
+  <div class="grid">
+    <div><svg id="s4" class="map" viewBox="0 0 500 540"></svg>
+      <p class="legend">เส้นน้ำเงินหนา = เลือก, เส้นประแดง = ข้ามเพราะเกิดวงจร</p></div>
+    <div class="panel">
+      <div class="ctl"><button class="b" id="n4">พิจารณาเส้นถัดไป</button><button class="b alt" id="a4">ทำจนจบ</button><button class="b alt" id="r4">เริ่มใหม่</button></div>
+      <p>ระยะทางรวมที่เลือก <span class="big" id="w4">0</span> กม. &nbsp; เลือกแล้ว <b id="c4">0</b>/11 เส้น</p>
+      <div id="s4t"></div>
+      <div class="log" id="l4"></div>
+    </div>
+  </div>
+  <h2 style="margin-top:34px">หลักการของต้นไม้ (Tree) จากโครงข่ายถนน</h2>
+  <p>ต้นไม้ในส่วนนี้คือต้นไม้ค้ำจุนน้อยสุด 11 เส้นที่ได้จาก Kruskal ด้านบน เลือกรากแล้วคลิกจุดเพื่อดูความสัมพันธ์ในต้นไม้</p>
+  <div class="panel"><h3>สมบัติสำคัญของต้นไม้</h3>
+    <ol class="pr">
+      <li>ต้นไม้คือกราฟเชื่อมโยงที่ <b>ไม่มีวงจร</b></li>
+      <li>ต้นไม้ที่มี n จุดยอด จะมี <b>n − 1 เส้นเชื่อม</b> เสมอ ที่นี่ <b id="tv"></b> จุด จึงมี <b id="te"></b> เส้น</li>
+      <li>ทุกคู่จุดยอดมี <b>เส้นทางเดียว</b> เท่านั้น (คลิกจุดด้านล่างเพื่อดูเส้นทางจากราก)</li>
+      <li>ลบเส้นใดก็ได้ ต้นไม้จะ<b>แยกขาดเป็นสองส่วน</b> เพิ่มเส้นใดก็ได้ จะ<b>เกิดวงจร</b></li>
+      <li>เลือกจุดหนึ่งเป็น <b>ราก (Root)</b> จะได้ต้นไม้มีราก ซึ่งมีพ่อแม่ (Parent), ลูก (Child), ใบ (Leaf), ระดับ (Level) และความสูง (Height)</li>
+    </ol></div>
+  <div class="grid" style="margin-top:16px">
+    <div><div class="ctl"><label>เลือกราก (Root) <select id="t5r"></select></label></div>
+      <svg id="s5" class="map" viewBox="0 0 560 400"></svg>
+      <p class="legend"><span class="dot" style="background:var(--bad)"></span>ราก<span class="dot" style="background:var(--pri)"></span>จุดภายใน<span class="dot" style="background:var(--ok)"></span>ใบ (ไม่มีลูก)</p></div>
+    <div class="panel"><h3>สรุปต้นไม้</h3><div id="ts"></div><h3 style="margin-top:12px" id="th">คลิกจุดบนต้นไม้</h3><div id="ti">คลิกจุดเพื่อดู Parent, Child, Level และเส้นทางจากราก</div></div>
+  </div>
+</section>
+
+</main>
+<script src="script.js"></script>
+</body>
+</html>
